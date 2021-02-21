@@ -1,0 +1,66 @@
+set -euo pipefail
+if [ $1 ]
+then
+	
+
+if [ $1 != compile -a $1 != run -a $1 != build ]
+then
+	echo "You should type like:"
+	echo " 		./b [COMMAND] [FILENAME] "
+	echo "where"
+	echo " 		[COMMAND] can be compile, run, build "
+	exit 2
+fi
+
+else
+	echo "Plz input command after ./b"
+	exit 2
+fi
+
+
+if [ ! $2 ]
+then
+	echo "input a filename"
+	exit 2
+fi
+
+
+filename=$2
+flength=${#filename}
+
+if [ $flength -lt 3 ]
+then
+	filename_c="${filename}.c"
+else
+
+end2=${filename:$[flength-2]:$[flength-1]}
+
+if [ $end2 != ".c" ]
+then
+	filename_c="${filename}.c"
+else
+	filename_c=$filename
+	filename=${filename:0:$[flength-2]}
+fi
+
+fi
+
+
+if [ ! -e ${filename_c} ]
+then
+	echo "Can not find the file"
+	exit 2	
+fi
+
+if [ $1 = compile ]
+then
+	gcc -Wall -std=c11 -g $filename_c -o $filename
+elif [ $1 = run ]
+then
+	./$filename
+else
+	gcc -Wall -std=c11 -g $filename_c -o filename
+	./$filename
+fi
+
+
